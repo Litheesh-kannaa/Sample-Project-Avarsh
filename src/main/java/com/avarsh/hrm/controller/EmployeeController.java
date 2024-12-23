@@ -45,14 +45,14 @@ public class EmployeeController {
     @ApiResponse(responseCode = "200",description = "New employee added")
     @Operation(summary = "Create new Employee")
     @PostMapping("/add-employee")
-    public void addEmployee(@RequestBody EmployeeDto employee){
+    public void addEmployee(@RequestBody Employee employee){
         employeeService.addEmployee(employee);
     }
 
     @ApiResponse(responseCode = "200",description = "Updated the employee's data of specified id")
     @Operation(summary = "Change an employee's details")
     @PutMapping("/update-employee/{id}")
-    public void updateEmployee(@RequestBody EmployeeDto employee,@PathVariable Long id){
+    public void updateEmployee(@RequestBody Employee employee,@PathVariable Long id){
         employeeService.updateEmployeeById(employee,id);
     }
 

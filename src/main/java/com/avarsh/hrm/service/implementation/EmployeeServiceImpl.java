@@ -34,12 +34,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void addEmployee(EmployeeDto employee) {
+    public void addEmployee(Employee employee) {
         repository.save(employee);
     }
 
     @Override
-    public void updateEmployeeById(@NotNull EmployeeDto employee, Long id) {
+    public void updateEmployeeById(@NotNull Employee employee, Long id) {
         if(employee.getId().equals(id)) {
             repository.save(employee);
         }
