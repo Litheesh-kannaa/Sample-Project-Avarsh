@@ -2,7 +2,9 @@ package com.avarsh.hrm.service;
 
 //import com.avarsh.hrm.dto.EmployeeDto;
 //import com.avarsh.hrm.dto.EmployeeDto;
+import com.avarsh.hrm.dto.AddressDto;
 import com.avarsh.hrm.dto.EmployeeDto;
+import com.avarsh.hrm.model.Address;
 import com.avarsh.hrm.model.Employee;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +13,9 @@ import java.util.List;
 @Service
 public interface EmployeeService {
 
-    List<EmployeeDto> getEmployees();
+    List<Employee> getEmployees();
 
-    EmployeeDto getEmployeeById(Long id);
+    Employee getEmployeeById(Long id);
 
     void addEmployee(Employee employee);
 
@@ -21,5 +23,12 @@ public interface EmployeeService {
 
     void deleteEmployeeById(Long id);
 
-    EmployeeDto convertEntityToDto(Employee employee);
+    EmployeeDto convertEmpEntityToDto(Employee employee);
+
+    Employee convertEmpDtoToEntity(EmployeeDto employee);
+
+    AddressDto convertAddEntityToDto(Address address);
+
+    Address convertAddDtoToEntity(AddressDto address);
+
 }
