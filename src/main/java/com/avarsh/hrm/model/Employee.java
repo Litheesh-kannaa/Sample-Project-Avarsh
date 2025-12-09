@@ -14,8 +14,8 @@ import java.util.List;
 //@Transactional
 @Data
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
+//@AllArgsConstructor
+//@NoArgsConstructor
 @ToString(exclude = "addresses")
 public class Employee {
     @Id
@@ -28,7 +28,8 @@ public class Employee {
     private String department;
     private Double salary;
 
-    @OneToMany( cascade = CascadeType.ALL, mappedBy = "employee")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
 //    @JoinColumn(name = "fk_empId", referencedColumnName = "id")
+    @JsonIgnore
     private List<Address> addresses;
 }

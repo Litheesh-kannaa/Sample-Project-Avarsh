@@ -5,14 +5,20 @@ import com.avarsh.hrm.dao.EmployeeDao;
 //import com.avarsh.hrm.dto.EmployeeDto;
 import com.avarsh.hrm.dto.AddressDto;
 import com.avarsh.hrm.dto.EmployeeDto;
+import com.avarsh.hrm.exception.EmployeeNotFoundException;
 import com.avarsh.hrm.model.Address;
 import com.avarsh.hrm.model.Employee;
 import com.avarsh.hrm.service.EmployeeService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,8 +36,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee getEmployeeById(Long id) {
+        //Optional<Employee> employee =  repository.findById(id);
+
         return repository.findById(id)
-                .orElse(new Employee());
+                .orElseThrow(() -> new EmployeeNotFoundException("cannot find the Employee with Id: " + id));
+
+            //throw new EmployeeNotFoundException("cannot find the Employee with Id: " + id);
 
 
     }
@@ -126,4 +136,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 //        addressEntity.setEmployee(employee);
         return addressEntity;
     }
+
+    @Override
+    public List<Employee> getEmployeeByName(String word) {
+        String newWord = word.toLowerCase();
+        List<Employee> employeeList = repository.findAll();
+        List<Employee> newEmployeeList = new ArrayList<>();
+        for (Employee employee : employeeList) {
+            String firstName = employee.getFirstName().toLowerCase();
+            String lastName = employee.getLastName().toLowerCase();
+            if (firstName.contains(newWord) || lastName.contains(newWord)) {
+                newEmployeeList.add(employee);
+            }
+        }
+        return newEmployeeList;
+    }
+
+    @Override
+    public Page<Employee> getEmployeeByPages(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return repository.findAll(pageable);
+    }
+
+
 }

@@ -6,11 +6,13 @@ import com.avarsh.hrm.dto.AddressDto;
 import com.avarsh.hrm.dto.EmployeeDto;
 import com.avarsh.hrm.model.Address;
 import com.avarsh.hrm.model.Employee;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
-@Service
+
 public interface EmployeeService {
 
     List<Employee> getEmployees();
@@ -31,4 +33,7 @@ public interface EmployeeService {
 
     Address convertAddDtoToEntity(AddressDto address);
 
+    List<Employee> getEmployeeByName(String word);
+
+    Page<Employee> getEmployeeByPages(int page, int size);
 }

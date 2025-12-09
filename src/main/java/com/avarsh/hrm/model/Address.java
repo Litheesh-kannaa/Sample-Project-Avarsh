@@ -12,8 +12,8 @@ import lombok.ToString;
 //@Transactional
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+//@NoArgsConstructor
+//@AllArgsConstructor
 @ToString(exclude = "employee")
 public class Address {
     @Id
@@ -21,8 +21,8 @@ public class Address {
     private Long addressId;
     private String addressDetail;
     private String addressType;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_employee_Id",nullable = false)
-    @JsonIgnore
+    //@JsonIgnore
     private Employee employee;
 }

@@ -3,6 +3,9 @@ package com.avarsh.hrm.dto;
 import com.avarsh.hrm.model.Address;
 import com.avarsh.hrm.model.Employee;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +25,7 @@ public class EmployeeDto {
     private String email;
     private String department;
     private Double salary;
-    @JsonProperty("addressList")
+
     private List<AddressDto> addressList;
 
 //    public List<AddressDto> getAddressList() {
