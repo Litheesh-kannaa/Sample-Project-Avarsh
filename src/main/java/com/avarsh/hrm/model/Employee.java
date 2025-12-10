@@ -28,7 +28,7 @@ public class Employee {
     private String department;
     private Double salary;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee", orphanRemoval = true)
 //    @JoinColumn(name = "fk_empId", referencedColumnName = "id")
     @JsonIgnore
     private List<Address> addresses;

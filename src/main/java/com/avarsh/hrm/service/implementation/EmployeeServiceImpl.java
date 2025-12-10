@@ -16,9 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,28 +51,50 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void updateEmployeeById(@NotNull Employee employee, Long id) {
-        Employee thisEmployee = repository.findById(id).orElseThrow(() -> new RuntimeException("Employee not found!"));
-        if (thisEmployee != null) {
+        Employee existingEmployee = repository.findById(id).orElseThrow(() ->
+                new EmployeeNotFoundException("cannot find the Employee with Id: " + id));
 
-            thisEmployee.setFirstName(employee.getFirstName());
-            thisEmployee.setLastName(employee.getLastName());
-            thisEmployee.setEmail(employee.getEmail());
-            thisEmployee.setDepartment(employee.getDepartment());
-            thisEmployee.setSalary(employee.getSalary());
 
-            if(employee.getAddresses() != null){
-                //thisEmployee.getAddresses().clear();
-                for(Address address : employee.getAddresses()){
-                    address.setEmployee(thisEmployee);
-                    if(!thisEmployee.getAddresses().contains(address)){
-                        thisEmployee.getAddresses().add(address);
-                    }
-                }
+        existingEmployee.setFirstName(employee.getFirstName());
+        existingEmployee.setLastName(employee.getLastName());
+        existingEmployee.setEmail(employee.getEmail());
+        existingEmployee.setDepartment(employee.getDepartment());
+        existingEmployee.setSalary(employee.getSalary());
 
-                thisEmployee.setAddresses(employee.getAddresses());
-            }
-            repository.save(thisEmployee);
+        List<Address> currentAddresses = existingEmployee.getAddresses();
+        List<Address> incomingAddresses = employee.getAddresses();
+
+        if (incomingAddresses == null) {
+            incomingAddresses = new ArrayList<>();
         }
+
+        Map<Long, Address> currAddByIdMap = new HashMap<>();
+        for (Address addr : currentAddresses) {
+            if (addr.getAddressId() != null) {
+                currAddByIdMap.put(addr.getAddressId(), addr);
+            }
+        }
+        List<Address> mergedList = new ArrayList<>();
+        for (Address inc : incomingAddresses) {
+            Long incId = inc.getAddressId();
+            if (incId != null && currAddByIdMap.containsKey(incId)) {
+                Address existingAddr = currAddByIdMap.get(incId);
+                existingAddr.setAddressDetail(inc.getAddressDetail());
+                existingAddr.setAddressType(inc.getAddressType());
+                mergedList.add(existingAddr);
+            } else {
+                Address newAddr = new Address();
+                newAddr.setAddressType(inc.getAddressType());
+                newAddr.setAddressDetail(inc.getAddressDetail());
+                newAddr.setEmployee(existingEmployee);
+                mergedList.add(newAddr);
+            }
+        }
+        existingEmployee.getAddresses().clear();
+        for (Address addr : mergedList) {
+            existingEmployee.getAddresses().add(addr);
+        }
+        repository.save(existingEmployee);
     }
 
     @Override
