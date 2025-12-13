@@ -86,12 +86,8 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/page")
-    public List<EmployeeDto> getEmployeeByPages(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
-        Page<Employee> employeeList =  employeeService.getEmployeeByPages(page, size);
-        List<EmployeeDto> employeeDtoList = new ArrayList<>();
-        for (Employee employee : employeeList) {
-            employeeDtoList.add(employeeService.convertEmpEntityToDto(employee));
-        }
-        return employeeDtoList;
+    public Page<EmployeeDto> getEmployeeByPages(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size, @RequestParam(defaultValue = "id") String sortBy, @RequestParam(defaultValue = "asc") String direction) {
+        Page<EmployeeDto> employeeList =  employeeService.getEmployeeByPages(page, size, sortBy, direction);
+        return employeeList;
     }
 }

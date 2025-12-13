@@ -11,9 +11,7 @@ import com.avarsh.hrm.model.Employee;
 import com.avarsh.hrm.service.EmployeeService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -159,23 +157,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> getEmployeeByName(String word) {
-        String newWord = word.toLowerCase();
-        List<Employee> employeeList = repository.findAll();
-        List<Employee> newEmployeeList = new ArrayList<>();
-        for (Employee employee : employeeList) {
-            String firstName = employee.getFirstName().toLowerCase();
-            String lastName = employee.getLastName().toLowerCase();
-            if (firstName.contains(newWord) || lastName.contains(newWord)) {
-                newEmployeeList.add(employee);
-            }
-        }
-        return newEmployeeList;
+
+        return repository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(word, word);
+
     }
 
     @Override
-    public Page<Employee> getEmployeeByPages(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return repository.findAll(pageable);
+    public Page<EmployeeDto> getEmployeeByPages(int page, int size, String sortBy, String direction) {
+        Sort sortOrder = direction.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sortOrder);
+        Page<Employee> employeePage = repository.findAll(pageable);
+        List<EmployeeDto> employeeDtoList = employeePage.getContent().stream().map(this::convertEmpEntityToDto).toList();
+        Page<EmployeeDto> employeeDtoPage = new PageImpl<>(employeeDtoList, employeePage.getPageable(), employeePage.getTotalElements());
+        return employeeDtoPage;
+
     }
 
 

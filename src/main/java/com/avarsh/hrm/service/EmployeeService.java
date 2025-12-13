@@ -7,10 +7,8 @@ import com.avarsh.hrm.dto.EmployeeDto;
 import com.avarsh.hrm.model.Address;
 import com.avarsh.hrm.model.Employee;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 
 public interface EmployeeService {
@@ -35,5 +33,5 @@ public interface EmployeeService {
 
     List<Employee> getEmployeeByName(String word);
 
-    Page<Employee> getEmployeeByPages(int page, int size);
+    Page<EmployeeDto> getEmployeeByPages(int page, int size,  String sortBy, String direction);
 }

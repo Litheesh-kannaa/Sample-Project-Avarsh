@@ -14,9 +14,6 @@ import lombok.ToString;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
 public class EmployeeDto {
 
     private Long id;

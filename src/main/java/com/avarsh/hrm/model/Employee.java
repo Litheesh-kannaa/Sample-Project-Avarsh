@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,11 +23,14 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String lastName;
     @Email
     private String email;
     private String department;
+    @PositiveOrZero
     private Double salary;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "employee", orphanRemoval = true)
